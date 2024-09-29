@@ -17,8 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from tasks import views
+from QuizApp import viewsQuiz
+from UserApp import viewsUser
+from BooksApp import viewsBooks
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.hello)
+    path('Home', views.Home),
+    path('User',viewsUser.FormUser),
+    path('Quiz',viewsQuiz.FormQuiz),
+    path('Books',viewsBooks.FormBook)
 ]
