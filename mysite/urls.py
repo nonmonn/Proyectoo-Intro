@@ -23,7 +23,7 @@ from BooksApp import viewsBooks
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('Home', views.Home),
+    path('', views.Home),
     path('User',viewsUser.FormUser),
     path('Quiz',viewsQuiz.FormQuiz),
     path('Books',viewsBooks.FormBook)
