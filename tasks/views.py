@@ -28,3 +28,6 @@ def signup(request):
 
 def home(request):
     return render(request, 'home.html') #pone el .html del home
+
+def prueba(request):
+    return render(request, "index.html") #esto es una prueba de login signoff
