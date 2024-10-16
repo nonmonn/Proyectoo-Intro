@@ -27,5 +27,6 @@ urlpatterns = [
     path('signup/', views.signup, name ='signup'),
     path('User',viewsUser.FormUser),
     path('Quiz',viewsQuiz.FormQuiz),
-    path('Books',viewsBooks.FormBook)
+    path('Books',viewsBooks.FormBook),
+    path("signoff",views.prueba) #esto es una prueba de login signoff
 ]
