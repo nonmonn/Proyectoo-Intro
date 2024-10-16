@@ -16,6 +16,7 @@ class Book(models.Model):
     description = models.TextField()
     publication_date = models.DateField()
     cover_image = models.ImageField(upload_to='covers/', null=True, blank=True)  # Para la portada del libro
+    pdf_file = models.FileField(upload_to='pdfs/', null=True, blank=True)  # Campo para cargar el PDFp
 
     def __str__(self):
         return self.title
