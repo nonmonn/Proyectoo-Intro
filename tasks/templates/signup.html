@@ -1,11 +1,43 @@
-<h1>Signup</h1>
+{% extends 'base.html' %}
 
-{{error}}
+    {% block content %}
+    
+    <main class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4 mt-5">
+                <form action="/signin/" method="POST" class="card card-body">
+                
+                    {% csrf_token %}
+                    <h2 class="text-center">Registrar</h2>
+                
+                    <!--textbox pal usuario-->
+                    <div class="mb-3">
+                        <label for="username">Nombre de usuario:</label>
+                        <input type="text" name="username" id="username" class="form-conttrol" placeholder="Escriba su usuario">
+                    </div>
+                
+                    <!--textbox para la contraseña-->
+                    <div class="mb-3">
+                        <label for="password1">Contraseña:</label>
+                        <input type="text" name="password1" id="password1" class="form-conttrol" placeholder="Escriba su contraseña">
+                    </div>
+                
+                    <!--texbox para confirmar la contraseña-->
+                    <div class="mb-3">
+                        <label for="password2">Confirme su contraseña:</label>
+                        <input type="text" name="password2" id="password2" class="form-conttrol" placeholder="Escriba su contraseña">
+                    </div>
+                    <!--boton de login-->
+                    <div class="text-center">
+                        <button class="btn btn-secondary">
+                            Registrar
+                        </button>
+                    </div>
+                
+                    {{error}}
+                </form>
+            </div>
+        </div>
+    </main>
 
-<form action="/signup/" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button>
-        Signup
-    </button>
-</form>
+{% endblock %}

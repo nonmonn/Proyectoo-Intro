@@ -1,31 +1,60 @@
-from django.shortcuts import render
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User 
-from django.http import HttpResponse 
 from .models import Book, Genre, Subgenre
+from django.contrib.auth import login, logout, authenticate
+from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
 
 def signup(request):
     if request.method == 'GET':
         return render(request, 'signup.html',{
         'form': UserCreationForm
     }) #de esta vola se pone el .html del signup
+
     else:
         if request.POST['password1'] == request.POST['password2']: #comparamos las contraseñas
             try: #si no existe el usuario pasa esto
                 #Registra usuario
                 user = User.objects.create_user(username=request.POST['username'], password=request.POST['password1']) #como son iguales da igual si es password 1 o 2
                 user.save()
-                return HttpResponse('User created successfully') # "Se creo de manera correcta el usuario"
-            except: #si se intenta registar usuario que ya existe
+                login(request, user)
+                return redirect('home')
+
+            except IntegrityError: #si se intenta registar usuario que ya existe
                 return render(request, 'signup.html',{
-        'form': UserCreationForm,
-        'error': 'Username already exists'
-    })
+                    'form': UserCreationForm,
+                    'error': 'Este nombre de usuario ya existe'
+                })
+            
         #para cuando se equivoquen escribiendo las contraseñas
         return render(request, 'signup.html',{
         'form': UserCreationForm,
-        'error': 'Password do not match'
+        'error': 'Las contraseñas no coinciden'
     })
+
+def signin(request):
+    if request.method == 'GET':
+        return render(request, 'signin.html', {
+            'form': AuthenticationForm    
+        })
+    
+    else:
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'signin.html', {
+                'form': AuthenticationForm,  
+                'error' : 'Username or password is incorrect'  
+            })
+        
+        else:
+            login(request, user)
+            return redirect('home')
+
+@login_required
+def signout(request):
+    logout(request)
+    return redirect('home')
 
 def home(request):
     return render(request, 'home.html') #pone el .html del home
@@ -33,6 +62,7 @@ def home(request):
 def prueba(request):
     return render(request, "index.html") #esto es una prueba de login signoff
 
+@login_required
 def book_list(request):
     genre_id = request.GET.get('genre')
     if genre_id:
@@ -43,6 +73,7 @@ def book_list(request):
     genres = Genre.objects.all()
     return render(request, 'books.html', {'books': books, 'genres': genres})
 
+@login_required
 def search_books(request):
     # Obtener todos los géneros y subgéneros
     genres = Genre.objects.all()
