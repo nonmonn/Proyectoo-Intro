@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User 
-from django.http import HttpResponse  
+from django.http import HttpResponse 
+from .models import Book, Genre 
 
 def signup(request):
     if request.method == 'GET':
@@ -31,3 +32,13 @@ def home(request):
 
 def prueba(request):
     return render(request, "index.html") #esto es una prueba de login signoff
+
+def book_list(request):
+    genre_id = request.GET.get('genre')
+    if genre_id:
+        books = Book.objects.filter(genre_id=genre_id)
+    else:
+        books = Book.objects.all()
+    
+    genres = Genre.objects.all()
+    return render(request, 'books.html', {'books': books, 'genres': genres})

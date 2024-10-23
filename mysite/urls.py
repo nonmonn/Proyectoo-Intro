@@ -17,16 +17,12 @@ Including another URLconf
 from django.contrib import admin # type: ignore
 from django.urls import path # type: ignore
 from tasks import views
-from QuizApp import viewsQuiz
-from UserApp import viewsUser
-from BooksApp import viewsBooks
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('signup/', views.signup, name ='signup'),
-    path('User',viewsUser.FormUser),
-    path('Quiz',viewsQuiz.FormQuiz),
-    path('Books',viewsBooks.FormBook),
+    path('books/', views.book_list, name='book_list'),
     path("signoff",views.prueba) #esto es una prueba de login signoff
 ]
+

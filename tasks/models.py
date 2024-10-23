@@ -62,3 +62,4 @@ class Recommendation(models.Model):
     def __str__(self):
         return f"Recommendation for {self.user.username}: {self.book.title}"
 
+
