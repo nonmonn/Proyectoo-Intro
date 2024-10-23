@@ -1,19 +1,15 @@
 from django.contrib import admin
-from .models import Book
-from .models import Genre
-from .models import Quiz
-from .models import Reward
-from .models import Achievement
-from .models import Recommendation
+from .models import Book, Genre, Quiz, Reward, Achievement, Recommendation, Subgenre
 
 # Modelos de admin
 
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['title', 'genre']
+    list_display = ['title', 'author', 'genre', 'get_subgenres']  # Usar el método aquí
     search_fields = ['title']
 
 # Register your models here.
 admin.site.register(Genre)
+admin.site.register(Subgenre)
 admin.site.register(Quiz)
 admin.site.register(Reward)
 admin.site.register(Achievement)

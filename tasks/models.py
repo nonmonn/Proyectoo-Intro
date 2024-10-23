@@ -9,17 +9,31 @@ class Genre(models.Model):
     def __str__(self):
         return self.name
 
+class Subgenre(models.Model):
+    name = models.CharField(max_length=100)
+    genero = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name="subgeneros")
+
+    def __str__(self):
+        return f"{self.name} ({self.genero.name})"
+    
+# models.py
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name="books")
+    subgenre = models.ManyToManyField(Subgenre, related_name='books')
     description = models.TextField()
     publication_date = models.DateField()
-    cover_image = models.ImageField(upload_to='covers/', null=True, blank=True)  # Para la portada del libro
-    pdf_file = models.FileField(upload_to='pdfs/', null=True, blank=True)  # Campo para cargar el PDFp
+    cover_image = models.ImageField(upload_to='covers/', null=True, blank=True)
 
     def __str__(self):
         return self.title
+
+    def get_subgenres(self):
+        return ", ".join([sub.name for sub in self.subgenre.all()])  # Crea una cadena con los nombres de los subgéneros
+
+    get_subgenres.short_description = 'get_subgenres'  # Nombre de la columna en el admin
+
 
 
 # models de quizapp 

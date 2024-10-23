@@ -1,0 +1,42 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Libros</title>
+</head>
+<body>
+    <h1>Buscar Libros</h1>
+    <form method="get">
+        <label for="genre">Filtrar por género:</label>
+        <select name="genre" id="genre">
+            <option value="">Todos los géneros</option>
+            {% for genre in genres %}
+            <option value="{{ genre.id }}" {% if genre.id|stringformat:"s" == selected_genre_id %}selected{% endif %}>
+                {{ genre.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label for="subgenre">Filtrar por subgénero:</label>
+        <select name="subgenre" id="subgenre">
+            <option value="">Todos los subgéneros</option>
+            {% for sub in subgenres %}
+            <option value="{{ sub.id }}" {% if sub.id|stringformat:"s" == selected_subgenre_id %}selected{% endif %}>
+                {{ sub.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Buscar</button>
+    </form>
+
+    <h2>Resultados de la búsqueda:</h2>
+    <ul>
+        {% for book in books %}
+        <li>{{ book.title }} - {{ book.genre }} - {{ book.subgenre }}</li>
+        {% empty %}
+        <li>No se encontraron libros.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

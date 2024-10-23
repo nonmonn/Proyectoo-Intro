@@ -23,6 +23,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('signup/', views.signup, name ='signup'),
     path('books/', views.book_list, name='book_list'),
+    path('buscar-libros/', views.search_books, name='search_books'),
     path("signoff",views.prueba) #esto es una prueba de login signoff
 ]
 

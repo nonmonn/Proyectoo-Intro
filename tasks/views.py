@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User 
 from django.http import HttpResponse 
-from .models import Book, Genre 
+from .models import Book, Genre, Subgenre
 
 def signup(request):
     if request.method == 'GET':
@@ -42,3 +42,29 @@ def book_list(request):
     
     genres = Genre.objects.all()
     return render(request, 'books.html', {'books': books, 'genres': genres})
+
+def search_books(request):
+    # Obtener todos los géneros y subgéneros
+    genres = Genre.objects.all()
+    subgenres = Subgenre.objects.all()
+    
+    # Obtener parámetros de búsqueda
+    selected_genre_id = request.GET.get('genre')
+    selected_subgenre_id = request.GET.get('subgenre')
+
+    # Filtrar libros según el género y subgénero seleccionados
+    books = Book.objects.all()
+    
+    if selected_genre_id:
+        books = books.filter(genre__id=selected_genre_id)
+    
+    if selected_subgenre_id:
+        books = books.filter(subgenre__id=selected_subgenre_id)
+
+    context = {
+        'books': books,
+        'genres': genres,
+        'subgenres': subgenres,
+    }
+    
+    return render(request, 'search_books.html', context)
