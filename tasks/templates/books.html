@@ -15,7 +15,10 @@
     
             <ul>
                 {% for book in books %}
-                <li>{{ book.title }} - {{ book.genre.name }}</li>
+                <li>
+                    <a href="{% url 'quiz' book.id %}">{{ book.title }}</a> - 
+                    {{ book.subgenre.name }}
+                </li>
                 {% empty %}
                 <li>No hay libros disponibles.</li>
                 {% endfor %}

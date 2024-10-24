@@ -1,8 +1,22 @@
 {% extends 'base.html' %}
-    {% block content %}
-    <main class="container py-5">
-        <section class="card card-body border rounded shadow-sm">
-
-        </section>
-    </main>
-    {% endblock %}
+{% block content %}
+<main class="container py-5">
+    <section class="card card-body">
+        <h2>{{ book.title }} - Cuestionario</h2>
+        {% if quizzes %}
+    <ul>
+        {% for quiz in quizzes %}
+                <li>
+                    <strong>{{ quiz.question }}</strong>
+                    <ul>
+                        {% for answer in quiz.answers.all %}
+                            <li>{{ answer.answer_text }}{% if answer.is_correct %} (Correcta){% endif %}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay cuestionarios disponibles para este libro.</p>
+    {% endif %}
+{% endblock %}

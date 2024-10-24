@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User 
-from .models import Book, Genre, Subgenre
+from .models import Book, Genre, Subgenre, Quiz
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
@@ -104,3 +104,15 @@ def search_books(request):
     }
     
     return render(request, 'search_books.html', context)
+
+@login_required
+def quiz(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    quizzes = Quiz.objects.filter(book=book)  # Obtener todas las preguntas relacionadas con el libro
+
+    if request.method == 'POST':
+        # Aquí puedes manejar la lógica de las respuestas del cuestionario
+        # Por ejemplo, podrías verificar las respuestas y dar feedback
+        pass  # Lógica para manejar respuestas aquí
+
+    return render(request, 'allquizes.html', {'book': book, 'quizzes': quizzes})

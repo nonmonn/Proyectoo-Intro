@@ -38,11 +38,18 @@ class Book(models.Model):
 class Quiz(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="quizzes")
     question = models.TextField()
-    correct_answer = models.CharField(max_length=200)
-    other_options = models.CharField(max_length=500)  # Opciones incorrectas separadas por comas
 
     def __str__(self):
         return f"Quiz for {self.book.title}"
+
+# models de respuestas
+class Answer(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="answers")
+    answer_text = models.CharField(max_length=200)
+    is_correct = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.answer_text
 
 # models de recompensas 
 class Reward(models.Model):

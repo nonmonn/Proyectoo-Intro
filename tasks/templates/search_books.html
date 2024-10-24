@@ -39,7 +39,7 @@
                             <ul>
                                 {% for book in books %}
                                 <li>
-                                    {{ book.title }} - {{ book.genre.name }} - 
+                                    <a href="{% url 'quiz' book.id %}">{{ book.title }}</a> - {{ book.genre.name }} - 
                                     {% if book.subgenre.all %}  <!-- Verificamos si hay subgéneros -->
                                         {{ book.get_subgenres }}  <!-- Usa el método que has definido -->
                                     {% else %}
