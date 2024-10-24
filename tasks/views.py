@@ -99,6 +99,8 @@ def search_books(request):
         'books': books,
         'genres': genres,
         'subgenres': subgenres,
+        'selected_genre_id': selected_genre_id,
+        'selected_subgenre_id': selected_subgenre_id,
     }
     
     return render(request, 'search_books.html', context)

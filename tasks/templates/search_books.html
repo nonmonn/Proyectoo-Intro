@@ -28,20 +28,28 @@
                                 <option value="{{ sub.id }}" {% if sub.id|stringformat:"s" == selected_subgenre_id %}selected{% endif %}>
                                     {{ sub.name }}
                                 </option>
+                                {% empty %}
+                                <option value="">No hay subgéneros disponibles</option>  <!-- Opcional: Mensaje si no hay subgéneros -->
                                 {% endfor %}
                             </select>
-                        
                             <button class="btn btn-secondary" type="submit">Buscar</button>
                         </form>
                     
                         <h4>Resultados de la búsqueda:</h4>
-                        <ul>
-                            {% for book in books %}
-                            <li>{{ book.title }} - {{ book.genre }} - {{ book.subgenre }}</li>
-                            {% empty %}
-                            <li>No se encontraron libros.</li>
-                            {% endfor %}
-                        </ul>
+                            <ul>
+                                {% for book in books %}
+                                <li>
+                                    {{ book.title }} - {{ book.genre.name }} - 
+                                    {% if book.subgenre.all %}  <!-- Verificamos si hay subgéneros -->
+                                        {{ book.get_subgenres }}  <!-- Usa el método que has definido -->
+                                    {% else %}
+                                        Sin subgénero  <!-- Mensaje alternativo si no hay subgénero -->
+                                    {% endif %}
+                                </li>
+                                {% empty %}
+                                <li>No se encontraron libros.</li>
+                                {% endfor %}
+                            </ul>
                     </body>
                     </html>
             </section>
