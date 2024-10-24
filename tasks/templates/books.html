@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
     {% block content %}
-        <h1>Lista de Libros</h1>
-
-        <form method="get">
-            <label for="genre">Filtrar por Género:</label>
-            <select name="genre" id="genre">
-                <option value="">Todos los géneros</option>
-                {% for genre in genres %}
-                <option value="{{ genre.id }}">{{ genre.name }}</option>
+    <main class="container py-5">
+        <section class="card card-body border rounded shadow-sm">
+            <form method="get">
+                <label for="genre">Filtrar por Género:</label>
+                <select name="genre" id="genre">
+                    <option value="">Todos los géneros</option>
+                    {% for genre in genres %}
+                    <option value="{{ genre.id }}">{{ genre.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Buscar</button>
+            </form>
+    
+            <ul>
+                {% for book in books %}
+                <li>{{ book.title }} - {{ book.genre.name }}</li>
+                {% empty %}
+                <li>No hay libros disponibles.</li>
                 {% endfor %}
-            </select>
-            <button type="submit">Buscar</button>
-        </form>
-
-        <ul>
-            {% for book in books %}
-            <li>{{ book.title }} - {{ book.genre.name }}</li>
-            {% empty %}
-            <li>No hay libros disponibles.</li>
-            {% endfor %}
-        </ul>
+            </ul>
+        </section>
+    </main>
     {% endblock %}
