@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 def signup(request):
     if request.method == 'GET':
-        return render(request, 'signup.html',{
+        return render(request, 'signup.html', {
         'form': UserCreationForm
     }) #de esta vola se pone el .html del signup
 
@@ -16,7 +16,8 @@ def signup(request):
         if request.POST['password1'] == request.POST['password2']: #comparamos las contraseñas
             try: #si no existe el usuario pasa esto
                 #Registra usuario
-                user = User.objects.create_user(username=request.POST['username'], password=request.POST['password1']) #como son iguales da igual si es password 1 o 2
+                user = User.objects.create_user(
+                    username=request.POST['username'], password=request.POST['password1']) #como son iguales da igual si es password 1 o 2
                 user.save()
                 login(request, user)
                 return redirect('home')
@@ -26,7 +27,7 @@ def signup(request):
                     'form': UserCreationForm,
                     'error': 'Este nombre de usuario ya existe'
                 })
-            
+
         #para cuando se equivoquen escribiendo las contraseñas
         return render(request, 'signup.html',{
         'form': UserCreationForm,
@@ -38,15 +39,17 @@ def signin(request):
         return render(request, 'signin.html', {
             'form': AuthenticationForm    
         })
-    
+
     else:
-        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        user = authenticate(
+            request, username=request.POST['username'], password=request.POST['password'])
+        
         if user is None:
             return render(request, 'signin.html', {
                 'form': AuthenticationForm,  
-                'error' : 'Username or password is incorrect'  
+                'error' : 'El nombre de usuario o la contraseña son incorrectos'  
             })
-        
+
         else:
             login(request, user)
             return redirect('home')
