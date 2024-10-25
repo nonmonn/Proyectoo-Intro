@@ -1,23 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Resultados del Cuestionario</h1>
 
-{% if responses %}
-    <ul>
-        {% for response in responses %}
-            <li>
-                <strong>Pregunta:</strong> {{ response.quiz.question }}<br>
-                <strong>Resultado:</strong> 
-                {% if response.is_correct %}
-                    <span style="color: green;">Correcta</span>
-                {% else %}
-                    <span style="color: red;">Incorrecta</span>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-    <p>Has respondido a este cuestionario {{ responses.count }} veces.</p>
-{% else %}
-    <p>No has respondido a este cuestionario aún.</p>
-{% endif %}
+<main class="container py-5">
+    <section class="card card-body border rounded shadow-sm">
+        <h1>Mis Restultados</h1>
+
+        {% if responses %}
+            <ul>
+                {% for response in responses %}
+                    <li>
+                        <strong>Pregunta:</strong> {{ response.quiz.question }}<br>
+                        <strong>Resultado:</strong> 
+                        {% if response.is_correct %}
+                            <span style="color: green;">Correcta</span>
+                        {% else %}
+                            <span style="color: red;">Incorrecta</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            <p>Has respondido a este cuestionario {{ responses.count }} veces.</p>
+        {% else %}
+            <p>No has respondido a este cuestionario aún.</p>
+        {% endif %}
+        <div class="text-center">
+            <a href="/buscar-libros" class="btn btn-outline-danger">
+                Volver
+            </a>
+        </div>
+    </section>
+</main>
 {% endblock %}

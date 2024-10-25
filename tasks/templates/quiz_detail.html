@@ -6,16 +6,25 @@
         <h1>{{ quiz.question }}</h1>
         <form method="POST">
             {% csrf_token %}
-            {% for answer in answers %}
-                <div>
-                    <input type="radio" id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
-                    <label for="answer_{{ answer.id }}">{{ answer.answer_text }}</label>
-                </div>
-            {% endfor %}
+            {% if answers %}
+                {% for answer in answers %}
+                    <div class="mb-1">
+                        <input type="radio" id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}" required>
+                        <label for="answer_{{ answer.id }}">{{ answer.answer_text }}</label>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No hay respuestas disponibles para esta pregunta.</p>
+            {% endif %}
             <div class="mt-2">
-                <button type="submit" class="btn btn-outline-primary">Enviar respuesta</button>
+                <button type="submit" class="btn btn-outline-danger">Enviar respuesta</button>
             </div>
         </form>
     </section>
+    <div class="text-center mt-3">
+        <a href="/buscar-libros" class="btn btn-outline-danger">
+            Salir de cuestionario
+        </a>
+    </div>
 </main>
 {% endblock %}

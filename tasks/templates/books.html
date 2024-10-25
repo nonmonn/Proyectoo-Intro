@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
     {% block content %}
-    <main class="container py-5">
-        <section class="card card-body border rounded shadow-sm">
-            <form method="get">
-                <label for="genre">Filtrar por Género:</label>
-                <select name="genre" id="genre">
-                    <option value="">Todos los géneros</option>
-                    {% for genre in genres %}
-                    <option value="{{ genre.id }}">{{ genre.name }}</option>
+        <main class="container py-5">
+            <section>
+                <form method="get">
+                    <label for="genre">Filtrar por Género:</label>
+                    <select name="genre" id="genre">
+                        <option value="">Todos los géneros</option>
+                        {% for genre in genres %}
+                        <option value="{{ genre.id }}">{{ genre.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-outline-primary">Buscar</button>
+                </form>
+            
+                <ul>
+                    {% for book in books %}
+                    <li>
+                        <a href="{% url 'quiz' book.id %}">{{ book.title }}</a> - 
+                        {{ book.subgenre.name }}
+                    </li>
+                    {% empty %}
+                    <li>No hay libros disponibles.</li>
                     {% endfor %}
-                </select>
-                <button type="submit">Buscar</button>
-            </form>
-    
-            <ul>
-                {% for book in books %}
-                <li>
-                    <a href="{% url 'quiz' book.id %}">{{ book.title }}</a> - 
-                    {{ book.subgenre.name }}
-                </li>
-                {% empty %}
-                <li>No hay libros disponibles.</li>
-                {% endfor %}
-            </ul>
-        </section>
-    </main>
+                </ul>
+            </section>
+        </main>
     {% endblock %}

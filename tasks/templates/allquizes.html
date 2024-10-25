@@ -2,12 +2,37 @@
 {% block content %}
 <main class="container py-5">
     <section class="card card-body border rounded shadow-sm">
-        <h2>{{ book.title }} - Cuestionario</h2>
+
+        <h2>{{ book.title }}</h2>
+        <div class="row g-5">
+            <div class="col-md-3">
+                <div class="position-sticky" style="top: 2rem;">
+                  <div class="p-4 mb-3 bg-body-tertiary rounded">
+                    <img src="Proyectoo-Intro-19\covers\{{ book.cover_image }}" class="mb-2">
+                    <p class="mb-0">{{ book.author }}</p>
+                    <p class="mb-0">{{ book.publication_date }}</p>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="cold-md-8">
+                    <h4>Descripción:</h4>
+                    <p>{{ book.description }}</p>
+                   </article>
+                </div>
+            </div>
+
+        </div>
+        
+    </section>
+    <section class="card card-body border rounded shadow-sm mt-3">
+        <h3>Cuestionario</h3>
         {% if quizzes %}
     <ul>
         {% for quiz in quizzes %}
                 <li>
-                    <a href="{% url 'quiz_detail' quiz_id=quiz.id %}">{{ quiz.question }}</a>
+                    <a href="{% url 'quiz_detail' quiz_id=quiz.id %}" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ quiz.question }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -15,5 +40,10 @@
         <p>No hay cuestionarios disponibles para este libro.</p>
     {% endif %}
     </section>
+    <div class="text-center  mt-3">
+        <a href="/buscar-libros" class="btn btn-outline-danger">
+            Volver
+        </a>
+    </div>
 </main>
 {% endblock %}
