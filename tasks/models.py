@@ -41,6 +41,7 @@ class Quiz(models.Model):
     def __str__(self):
         return f"Quiz for {self.book.title}"
 
+
 # models de respuestas
 class Answer(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="answers")

@@ -1,13 +1,21 @@
+{% extends 'base.html' %}
+
 {% block content %}
-    <h1>{{ quiz.question }}</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {% for answer in answers %}
-            <div>
-                <input type="radio" id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
-                <label for="answer_{{ answer.id }}">{{ answer.answer_text }}</label>
+<main class="container py-5">
+    <section class="card card-body border rounded shadow-sm">
+        <h1>{{ quiz.question }}</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {% for answer in answers %}
+                <div>
+                    <input type="radio" id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
+                    <label for="answer_{{ answer.id }}">{{ answer.answer_text }}</label>
+                </div>
+            {% endfor %}
+            <div class="mt-2">
+                <button type="submit" class="btn btn-outline-primary">Enviar respuesta</button>
             </div>
-        {% endfor %}
-        <button type="submit">Enviar respuesta</button>
-    </form>
+        </form>
+    </section>
+</main>
 {% endblock %}
