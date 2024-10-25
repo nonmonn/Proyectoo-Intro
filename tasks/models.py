@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # models de books
 class Genre(models.Model):
     name = models.CharField(max_length=100)
@@ -32,13 +32,12 @@ class Book(models.Model):
 
     get_subgenres.short_description = 'get_subgenres'  # Nombre de la columna en el admin
 
-
-
 # models de quizapp 
 class Quiz(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="quizzes")
     question = models.TextField()
-
+    response_count = models.IntegerField(default=0)
+    
     def __str__(self):
         return f"Quiz for {self.book.title}"
 
@@ -51,6 +50,16 @@ class Answer(models.Model):
     def __str__(self):
         return self.answer_text
 
+# models de guardado de respuestas usuario
+class UserQuizResponse(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quiz_responses")
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="user_responses")
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    is_correct = models.BooleanField(default=False)
+    date_submitted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} answered {self.quiz.book.title} - {self.answer.answer_text}"
 # models de recompensas 
 class Reward(models.Model):
     name = models.CharField(max_length=100)
@@ -61,8 +70,6 @@ class Reward(models.Model):
         return self.name
 
 # modelos para logro de usuarios. Aquí puedes relacionar a los usuarios con los logros obtenidos:
-
-from django.contrib.auth.models import User
 
 class Achievement(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="achievements")

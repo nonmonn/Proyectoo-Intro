@@ -7,12 +7,7 @@
     <ul>
         {% for quiz in quizzes %}
                 <li>
-                    <strong>{{ quiz.question }}</strong>
-                    <ul>
-                        {% for answer in quiz.answers.all %}
-                            <li>{{ answer.answer_text }}{% if answer.is_correct %} (Correcta){% endif %}</li>
-                        {% endfor %}
-                    </ul>
+                    <a href="{% url 'quiz_detail' quiz_id=quiz.id %}">{{ quiz.question }}</a>
                 </li>
             {% endfor %}
         </ul>

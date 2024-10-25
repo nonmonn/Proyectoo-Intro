@@ -1,0 +1,14 @@
+
+{% block content %}
+    <h1>{{ quiz.question }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {% for answer in answers %}
+            <div>
+                <input type="radio" id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
+                <label for="answer_{{ answer.id }}">{{ answer.answer_text }}</label>
+            </div>
+        {% endfor %}
+        <button type="submit">Enviar respuesta</button>
+    </form>
+{% endblock %}

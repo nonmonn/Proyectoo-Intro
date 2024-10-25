@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User 
-from .models import Book, Genre, Subgenre, Quiz
+from .models import Book, Genre, Subgenre, Quiz, UserQuizResponse, Answer
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
@@ -116,3 +116,35 @@ def quiz(request, book_id):
         pass  # Lógica para manejar respuestas aquí
 
     return render(request, 'allquizes.html', {'book': book, 'quizzes': quizzes})
+
+@login_required
+def quiz_detail(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    answers = quiz.answers.all()
+
+    if request.method == "POST":
+        selected_answer_id = request.POST.get('answer')
+        selected_answer = get_object_or_404(Answer, id=selected_answer_id)
+
+        # Verificar si la respuesta es correcta
+        is_correct = selected_answer.is_correct
+
+        # Crear la respuesta del usuario
+        UserQuizResponse.objects.create(
+            user=request.user,
+            quiz=quiz,
+            answer=selected_answer,
+            is_correct=is_correct
+        )
+
+        # Incrementar el contador de respuestas
+        quiz.response_count += 1
+        quiz.save()
+
+        return redirect('quiz_result', quiz_id=quiz.id)  # Redirigir a una página de resultados
+
+    return render(request, 'quiz_detail.html', {'quiz': quiz, 'answers': answers})
+
+def quiz_result(request, quiz_id):
+    responses = UserQuizResponse.objects.filter(quiz_id=quiz_id, user=request.user)
+    return render(request, 'quiz_result.html', {'responses': responses})
