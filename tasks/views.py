@@ -145,6 +145,7 @@ def quiz_detail(request, quiz_id):
 
     return render(request, 'quiz_detail.html', {'quiz': quiz, 'answers': answers})
 
+@login_required
 def quiz_result(request, quiz_id):
     responses = UserQuizResponse.objects.filter(quiz_id=quiz_id, user=request.user)
     return render(request, 'quiz_result.html', {'responses': responses})
