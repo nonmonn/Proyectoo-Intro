@@ -59,6 +59,17 @@ def signout(request):
     logout(request)
     return redirect('home')
 
+@login_required
+def user_profile(request):
+    user = request.user
+    user_quizzes = UserQuizResponse.objects.filter(user=user).select_related('quiz', 'quiz__book', 'answer')
+
+    context = {
+        'user': user,
+        'user_quizzes': user_quizzes,
+    }
+    return render(request, 'profile.html', context)
+
 def home(request):
     return render(request, 'home.html') #pone el .html del home
 

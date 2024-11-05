@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container py-5">
+    <section class="card card-body mb-3">
+        <h1>Perfil de {{ user.username }}</h1>
+    </section>
+
+    <section class="card card-body">
+        <h2>Quizzes contestados</h2>
+        {% if user_quizzes %}
+            <ul>
+            {% for response in user_quizzes %}
+                <li>
+                    <strong>Libro:</strong> {{ response.quiz.book.title }}<br>
+                    <strong>Pregunta:</strong> {{ response.quiz.question }}<br>
+                    <strong>Tu respuesta:</strong> {{ response.answer.answer_text }}<br>
+                    <strong>Correcta:</strong> {{ response.is_correct|yesno:"Sí,No" }}<br>
+                    <strong>Fecha de respuesta:</strong> {{ response.date_submitted|date:"d M Y, H:i" }}
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No has contestado ningún quiz todavía.</p>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

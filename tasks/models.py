@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # models de books
 class Genre(models.Model):
     name = models.CharField(max_length=100)
@@ -62,15 +63,14 @@ class UserQuizResponse(models.Model):
     def __str__(self):
         return f"{self.user.username} answered {self.quiz.book.title} - {self.answer.answer_text}"
 # models de recompensas 
+
 class Reward(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    level_required = models.IntegerField(default=1)
+    points_required = models.IntegerField(default=1)
 
     def __str__(self):
         return self.name
-
-# modelos para logro de usuarios. Aquí puedes relacionar a los usuarios con los logros obtenidos:
 
 class Achievement(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="achievements")
@@ -79,7 +79,7 @@ class Achievement(models.Model):
 
     def __str__(self):
         return f"{self.user.username} earned {self.reward.name}"
-
+        
 # models para sistema de recomendaciones 
 class Recommendation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recommendations")
