@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 # models de books
 class Genre(models.Model):
@@ -87,6 +89,9 @@ class UserReward(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.reward.name}"
-        
+@receiver(post_delete, sender=UserQuizResponse)        
+def delete_user_reward(sender, instance, **kwargs):
+    # Buscar y borrar la recompensa relacionada si existe
+    UserReward.objects.filter(user=instance.user, reward__quiz=instance.quiz).delete()
 # models para sistema de recomendaciones 
 

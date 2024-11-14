@@ -138,10 +138,7 @@ def quiz(request, book_id):
 
     # Mostrar un mensaje si no hay más preguntas para responder
     if not quizzes_to_answer.exists():
-        return render(request, 'allquizes.html', {
-            'book': book,
-            'message': "Ya respondiste correctamente todas las preguntas de este cuestionario."
-        })
+        return render(request, 'allquizes.html')
 
     return render(request, 'allquizes.html', {
         'book': book,
@@ -182,9 +179,18 @@ def quiz_detail(request, quiz_id):
 
             # Redirigir a la página de resultados
             return redirect('quiz_result', quiz_id=quiz.id)
-
-        # Si la respuesta es incorrecta, redirigir de nuevo al detalle del cuestionario
-        return redirect('quiz_detail', quiz_id=quiz.id)
+        else:
+            # Guardar la respuesta incorrecta del usuario
+            UserQuizResponse.objects.create(
+                user=request.user,
+                quiz=quiz,
+                answer=selected_answer,
+                is_correct=is_correct
+            )
+            quiz.save()
+            # Redirigir a la página de resultados
+            return redirect('quiz_result', quiz_id=quiz.id)
+        
 
     return render(request, 'quiz_detail.html', {'quiz': quiz, 'answers': answers})
 

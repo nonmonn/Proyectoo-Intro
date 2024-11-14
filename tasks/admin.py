@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, Genre, Quiz, Subgenre, Answer, Reward, UserReward
+from .models import Book, Genre, Quiz, Subgenre, Answer, Reward, UserReward, UserQuizResponse
 
 # Modelos de admin
 
@@ -19,6 +19,7 @@ class RewardAdmin(admin.ModelAdmin):
     search_fields = ['name', 'quiz__book__title']  # Campos por los que se puede buscar
     list_filter = ['quiz']  # Filtros por los que se puede filtrar
 
+
 # Register your models here.
 admin.site.register(Genre)
 admin.site.register(Subgenre)
@@ -27,3 +28,4 @@ admin.site.register(Book, BookAdmin)
 admin.site.register(Answer)
 admin.site.register(Reward, RewardAdmin)
 admin.site.register(UserReward)
+admin.site.register(UserQuizResponse)
