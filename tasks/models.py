@@ -67,25 +67,26 @@ class UserQuizResponse(models.Model):
 class Reward(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    points_required = models.IntegerField(default=1)
+    image = models.ImageField(upload_to='rewards/', null=True, blank=True)
+    quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE, related_name='rewards')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        permissions = [
+            ("can_edit_rewards", "Can edit rewards"),
+        ]
 
     def __str__(self):
         return self.name
 
-class Achievement(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="achievements")
-    reward = models.ForeignKey(Reward, on_delete=models.CASCADE)
-    date_earned = models.DateTimeField(auto_now_add=True)
+class UserReward(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rewards')
+    reward = models.ForeignKey(Reward, on_delete=models.CASCADE, related_name='user_rewards')
+    date_awarded = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} earned {self.reward.name}"
+        return f"{self.user.username} - {self.reward.name}"
         
 # models para sistema de recomendaciones 
-class Recommendation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recommendations")
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    date_recommended = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Recommendation for {self.user.username}: {self.book.title}"
 

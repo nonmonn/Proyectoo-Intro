@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User 
-from .models import Book, Genre, Subgenre, Quiz, UserQuizResponse, Answer
+from .models import Book, Genre, Subgenre, Quiz, UserQuizResponse, Answer, Reward, UserReward
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
@@ -63,10 +63,12 @@ def signout(request):
 def user_profile(request):
     user = request.user
     user_quizzes = UserQuizResponse.objects.filter(user=user).select_related('quiz', 'quiz__book', 'answer')
+    user_rewards = UserReward.objects.filter(user=user).select_related('reward')
 
     context = {
         'user': user,
         'user_quizzes': user_quizzes,
+        'user_rewards': user_rewards,
     }
     return render(request, 'profile.html', context)
 
@@ -119,14 +121,28 @@ def search_books(request):
 @login_required
 def quiz(request, book_id):
     book = get_object_or_404(Book, id=book_id)
-    quizzes = Quiz.objects.filter(book=book)  # Obtener todas las preguntas relacionadas con el libro
+    quizzes = Quiz.objects.filter(book=book)
 
-    if request.method == 'POST':
-        # Aquí puedes manejar la lógica de las respuestas del cuestionario
-        # Por ejemplo, podrías verificar las respuestas y dar feedback
-        pass  # Lógica para manejar respuestas aquí
+    # Filtrar las preguntas que el usuario ya ha respondido correctamente
+    answered_correctly = UserQuizResponse.objects.filter(
+        user=request.user,
+        is_correct=True
+    ).values_list('quiz_id', flat=True)
 
-    return render(request, 'allquizes.html', {'book': book, 'quizzes': quizzes})
+    # Obtener solo las preguntas que el usuario no ha respondido o ha respondido incorrectamente
+    quizzes_to_answer = quizzes.exclude(id__in=answered_correctly)
+
+    # Mostrar un mensaje si no hay más preguntas para responder
+    if not quizzes_to_answer.exists():
+        return render(request, 'allquizes.html', {
+            'book': book,
+            'message': "Ya respondiste correctamente todas las preguntas de este cuestionario."
+        })
+
+    return render(request, 'allquizes.html', {
+        'book': book,
+        'quizzes': quizzes_to_answer
+    })
 
 @login_required
 def quiz_detail(request, quiz_id):
@@ -140,19 +156,31 @@ def quiz_detail(request, quiz_id):
         # Verificar si la respuesta es correcta
         is_correct = selected_answer.is_correct
 
-        # Crear la respuesta del usuario
-        UserQuizResponse.objects.create(
-            user=request.user,
-            quiz=quiz,
-            answer=selected_answer,
-            is_correct=is_correct
-        )
+        if is_correct:
+            # Guardar la respuesta correcta del usuario
+            UserQuizResponse.objects.create(
+                user=request.user,
+                quiz=quiz,
+                answer=selected_answer,
+                is_correct=is_correct
+            )
 
-        # Incrementar el contador de respuestas
-        quiz.response_count += 1
-        quiz.save()
+            # Incrementar el contador de respuestas
+            quiz.response_count += 1
+            quiz.save()
 
-        return redirect('quiz_result', quiz_id=quiz.id)  # Redirigir a una página de resultados
+            # Asignar la recompensa al usuario si aún no la tiene
+            reward = Reward.objects.filter(quiz=quiz).first()
+            if reward:
+                user_reward_exists = UserReward.objects.filter(user=request.user, reward=reward).exists()
+                if not user_reward_exists:
+                    UserReward.objects.create(user=request.user, reward=reward)
+
+            # Redirigir a la página de resultados
+            return redirect('quiz_result', quiz_id=quiz.id)
+
+        # Si la respuesta es incorrecta, redirigir de nuevo al detalle del cuestionario
+        return redirect('quiz_detail', quiz_id=quiz.id)
 
     return render(request, 'quiz_detail.html', {'quiz': quiz, 'answers': answers})
 

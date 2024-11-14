@@ -6,19 +6,41 @@
         <h1>Perfil de {{ user.username }}</h1>
     </section>
 
+    <section class="card card-body mb-3">
+        <h2>Recompensas obtenidas</h2>
+        {% if user_rewards %}
+            <ul class="reward-list">
+                {% for user_reward in user_rewards %}
+                    <li class="reward-item">
+                        {% if user_reward.reward.image %}
+                        <img src="{{ reward.image.url }}" alt="{{ reward.name }}" class="reward-image" width="100" height="100">
+                        {% endif %}
+                        <div class="reward-details">
+                            <h4>{{ user_reward.reward.name }}</h4>
+                            <p>{{ user_reward.reward.description }}</p>
+                            <small>Obtenida el: {{ user_reward.date_awarded|date:"d M Y, H:i" }}</small>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aún no has obtenido ninguna recompensa.</p>
+        {% endif %}
+    </section>
+
     <section class="card card-body">
         <h2>Quizzes contestados</h2>
         {% if user_quizzes %}
             <ul>
-            {% for response in user_quizzes %}
-                <li>
-                    <strong>Libro:</strong> {{ response.quiz.book.title }}<br>
-                    <strong>Pregunta:</strong> {{ response.quiz.question }}<br>
-                    <strong>Tu respuesta:</strong> {{ response.answer.answer_text }}<br>
-                    <strong>Correcta:</strong> {{ response.is_correct|yesno:"Sí,No" }}<br>
-                    <strong>Fecha de respuesta:</strong> {{ response.date_submitted|date:"d M Y, H:i" }}
-                </li>
-            {% endfor %}
+                {% for response in user_quizzes %}
+                    <li>
+                        <strong>Libro:</strong> {{ response.quiz.book.title }}<br>
+                        <strong>Pregunta:</strong> {{ response.quiz.question }}<br>
+                        <strong>Tu respuesta:</strong> {{ response.answer.answer_text }}<br>
+                        <strong>Correcta:</strong> {{ response.is_correct|yesno:"Sí,No" }}<br>
+                        <strong>Fecha de respuesta:</strong> {{ response.date_submitted|date:"d M Y, H:i" }}
+                    </li>
+                {% endfor %}
             </ul>
         {% else %}
             <p>No has contestado ningún quiz todavía.</p>

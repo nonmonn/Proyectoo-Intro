@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin # type: ignore
 from django.urls import path # type: ignore
 from tasks import views
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
@@ -34,3 +35,5 @@ urlpatterns = [
     path("signoff",views.prueba) #esto es una prueba de login signoff
 ]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
