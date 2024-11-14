@@ -1,10 +1,14 @@
+from django.conf import settings
+import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User 
 from .models import Book, Genre, Subgenre, Quiz, UserQuizResponse, Answer, Reward, UserReward
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Count
+from django.contrib.auth.decorators import login_required, permission_required
 
 def signup(request):
     if request.method == 'GET':
@@ -183,6 +187,22 @@ def quiz_detail(request, quiz_id):
         return redirect('quiz_detail', quiz_id=quiz.id)
 
     return render(request, 'quiz_detail.html', {'quiz': quiz, 'answers': answers})
+
+@login_required
+def book_list(request):
+    genre_id = request.GET.get('genre')
+    
+    # Annotate each book with the total count of responses from all related quizzes
+    books = (
+        Book.objects.annotate(total_responses=Count('quizzes__user_responses'))
+        .order_by('-total_responses')
+    )
+    
+    if genre_id:
+        books = books.filter(genre_id=genre_id)
+    
+    genres = Genre.objects.all()
+    return render(request, 'books.html', {'books': books, 'genres': genres})
 
 @login_required
 def quiz_result(request, quiz_id):
