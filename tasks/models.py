@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+#from django.utils import timezone
+#from datetime import date
 
 # models de books
 class Genre(models.Model):
@@ -95,3 +97,51 @@ def delete_user_reward(sender, instance, **kwargs):
     UserReward.objects.filter(user=instance.user, reward__quiz=instance.quiz).delete()
 # models para sistema de recomendaciones 
 
+
+#meses = [
+#        [1, 'Enero'],
+#        [2, 'Febrero'],
+#        [3, 'Marzo'],
+#        [4, 'Abril'],
+#        [5, 'Mayo'],
+#        [6, 'Junio'],
+#        [7, 'Julio'],
+#        [8, 'Agosto'],
+#        [9, 'Septiembre'],
+#        [10, 'Octubre'],
+#        [11, 'Noviembre'],
+#        [12, 'Diciembre'],
+#    ]
+#
+#dias = [
+#    [1, '1'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], 
+#    [6, '6'], [7, '7'], [8, '8'], [9, '9'], [10, '10'], 
+#    [11, '11'], [12, '12'], [13, '13'], [14, '14'], [15, '15'], 
+#    [16, '16'], [17, '17'], [18, '18'], [19, '19'], [20, '20'], 
+#    [21, '21'], [22, '22'], [23, '23'], [24, '24'], [25, '25'], 
+#    [26, '26'], [27, '27'], [28, '28'], [29, '29'], [30, '30'], 
+#    [31, '31']
+#]
+#
+#class Books(models.Model):
+#    years = [(year, str(year)) for year in range(1000, date.today().year + 1)]
+#    #decir que tipo de dato estamos introduciendo 
+#    title = models.CharField(max_length=200) #CharField para strings o textos pequeños
+#    author = models.CharField(max_length=30)
+#    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name="books")
+#    subgenre = models.ManyToManyField(Subgenre, related_name='books')
+#    description = models.TextField #TextField para textos largos
+#    year = models.IntegerField(choices=years, null=True, blank=True)
+#    month = models.IntegerField(choices= meses, null=True, blank=True)
+#    day = models.IntegerField(choices= dias, null=True, blank=True)
+#    cover_image = models.ImageField(upload_to="imagenes", null=True)
+#
+#    
+#    def __str__(self):
+#        return self.title
+#    
+#    def get_subgenres(self):
+#        return ", ".join([sub.name for sub in self.subgenre.all()])  # Crea una cadena con los nombres de los subgéneros
+#
+#    get_subgenres.short_description = 'get_subgenres'  # Nombre de la columna en el admin
+#

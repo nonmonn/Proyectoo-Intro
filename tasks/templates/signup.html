@@ -1,43 +1,53 @@
 {% extends 'base.html' %}
 
-    {% block content %}
-    
-    <main class="container">
-        <div class="row">
-            <div class="col-md-4 offset-md-4 mt-5">
-                <form method="POST" class="card card-body border rounded shadow-sm">
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4 mt-5">
+            <form method="POST" class="card card-body border rounded shadow-sm">
                 
-                    {% csrf_token %}
-                    <h2 class="text-center">Registrar</h2>
-                
-                    <!--textbox pal usuario-->
-                    <div class="mb-3">
-                        <label for="username">Nombre de usuario:</label>
-                        <input class="form-control" type="text" name="username" id="username" class="form-conttrol" placeholder="Escriba su usuario">
-                    </div>
-                
-                    <!--textbox para la contraseña-->
-                    <div class="mb-3">
-                        <label for="password1">Contraseña:</label>
-                        <input class="form-control" type="password" name="password1" id="password1" class="form-conttrol" placeholder="Escriba su contraseña">
-                    </div>
-                
-                    <!--texbox para confirmar la contraseña-->
-                    <div class="mb-3">
-                        <label for="password2">Confirme su contraseña:</label>
-                        <input class="form-control" type="password" name="password2" id="password2" class="form-conttrol" placeholder="Escriba su contraseña">
-                    </div>
-                    <!--boton de signup-->
-                    <div class="text-center">
-                        <button class="btn btn-outline-danger">
-                            Registrar
-                        </button>
-                    </div>
-                
-                    {{error}}
-                </form>
-            </div>
+                {% csrf_token %}
+                <h2 class="text-center">Registrar</h2>
+
+                <!--textbox pal usuario-->
+                <div class="mb-3">
+                    <label for="username">Nombre de usuario:</label>
+                    <input class="form-control" type="text" name="username" id="username" placeholder="Escriba su usuario" value="{{ form.username.value }}">
+                </div>
+
+                <!--textbox para el correo electrónico-->
+                <div class="mb-3">
+                    <label for="email">Correo electrónico:</label>
+                    <input class="form-control" type="email" name="email" id="email" placeholder="Escriba su correo electrónico" value="{{ form.email.value }}">
+                </div>
+
+                <!--textbox para la contraseña-->
+                <div class="mb-3">
+                    <label for="password1">Contraseña:</label>
+                    <input class="form-control" type="password" name="password1" id="password1" placeholder="Escriba su contraseña">
+                </div>
+
+                <!--textbox para confirmar la contraseña-->
+                <div class="mb-3">
+                    <label for="password2">Confirme su contraseña:</label>
+                    <input class="form-control" type="password" name="password2" id="password2" placeholder="Confirme su contraseña">
+                </div>
+
+                <!--boton de registro-->
+                <div class="text-center">
+                    <button class="btn btn-outline-danger">
+                        Registrarse
+                    </button>
+                </div>
+
+                {% if error %}
+                <p style="color: red; text-align: center;">{{ error }}</p>
+                {% endif %}
+            </form>
         </div>
-    </main>
+    </div>
+</main>
 
 {% endblock %}
+

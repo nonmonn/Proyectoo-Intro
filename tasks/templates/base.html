@@ -12,7 +12,6 @@
         <div class="container">
           <a class="navbar-brand" href="/">
             <img src="/static/imagenes/imagen_2.jpg" alt="PlatyBooks" width="30" height="30">
-            <span>PlatyBooks</span>
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -53,10 +52,10 @@
               -->
               {% else %}
               <li class="nav-item">
-                <a class="nav-link" href="/signup">Signup</a>
+                <a class="nav-link" href="{% url 'signup' %}">Signup</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/signin">Signin</a>
+                <a class="nav-link" href="{% url 'signin' %}">Signin</a>
               </li>
               {% endif %}
             </ul>
