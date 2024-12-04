@@ -12,9 +12,6 @@
             <ul class="reward-list">
                 {% for user_reward in user_rewards %}
                     <li class="reward-item">
-                        {% if user_reward.reward.image %}
-                        <img src="{{ reward.image.url }}" alt="{{ reward.name }}" class="reward-image" width="100" height="100">
-                        {% endif %}
                         <div class="reward-details">
                             <h4>{{ user_reward.reward.name }}</h4>
                             <p>{{ user_reward.reward.description }}</p>

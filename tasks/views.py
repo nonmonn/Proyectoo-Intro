@@ -156,7 +156,10 @@ def quiz(request, book_id):
 
     # Mostrar un mensaje si no hay más preguntas para responder
     if not quizzes_to_answer.exists():
-        return render(request, 'allquizes.html')
+        return render(request, 'allquizes.html', {
+            'book': book,  # Asegúrate de incluir la información del libro
+            'quizzes': None  # O explícitamente pasa un valor que indique que no hay cuestionarios
+        })
 
     return render(request, 'allquizes.html', {
         'book': book,

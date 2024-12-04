@@ -27,7 +27,6 @@ class Book(models.Model):
     subgenre = models.ManyToManyField(Subgenre, related_name='books')
     description = models.TextField()
     publication_date = models.DateField()
-    cover_image = models.ImageField(upload_to='media/covers/', null=True, blank=True)
 
     def __str__(self):
         return self.title
